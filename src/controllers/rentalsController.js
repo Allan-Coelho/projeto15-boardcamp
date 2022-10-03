@@ -135,6 +135,20 @@ async function deleteRentalById(request, response) {
       "SELECT * FROM rentals WHERE id=$1",
       [id]
     );
+
+    if (rentalsQuery.rowCount === 0) {
+      response.sendStatus(STATUS_CODE.NOT_FOUND);
+      return;
+    }
+
+    const rental = rentalsQuery.rows[0];
+    if (rental.returnDate === null) {
+      response.sendStatus(STATUS_CODE.BAD_REQUEST);
+      return;
+    }
+
+    await database.query("DELETE FROM rentals WHERE id=$1", [id]);
+    response.sendStatus(STATUS_CODE.OK);
   } catch (err) {
     console.log(err);
     response.sendStatus(STATUS_CODE.SERVER_ERROR);
