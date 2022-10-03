@@ -42,5 +42,36 @@ async function customerAlreadyExist(cpf) {
   }
 }
 
+async function customerIdAlreadyExist(id) {
+  try {
+    const result = await database.query("SELECT * FROM customers WHERE id=$1", [
+      id,
+    ]);
 
-export { categoryAlreadyExist, gameAlreadyExist, customerAlreadyExist };
+    return result.rowCount === 0 ? false : true;
+  } catch (err) {
+    console.log(err);
+    console.log("alreadyExist error");
+  }
+}
+
+async function gameIdAlreadyExist(id) {
+  try {
+    const result = await database.query(
+      "SELECT * FROM games WHERE id=$1",
+      [id]
+    );
+
+    return result.rowCount === 0 ? false : true;
+  } catch (err) {
+    console.log(err);
+    console.log("alreadyExist error");
+  }
+}
+export {
+  categoryAlreadyExist,
+  gameAlreadyExist,
+  customerAlreadyExist,
+  gameIdAlreadyExist,
+  customerIdAlreadyExist,
+};
