@@ -7,6 +7,8 @@ const propertiesToSanitize = [
   "stockTotal",
   "categoryId",
   "pricePerDay",
+  "cpf",
+  "id"
 ];
 
 function htmlSanitizer(request, response, next) {
