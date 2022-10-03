@@ -47,6 +47,7 @@ async function listRentals(request, response) {
 
 function createRental(request, response) {
   try {
+    
   } catch (err) {
     console.log(err);
     response.sendStatus(STATUS_CODE.SERVER_ERROR);
