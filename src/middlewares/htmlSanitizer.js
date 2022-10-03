@@ -13,6 +13,8 @@ const propertiesToSanitize = [
   "cpf",
   "birthday",
   "customerId",
+  "gameId",
+  "daysRented",
 ];
 
 function htmlSanitizer(request, response, next) {

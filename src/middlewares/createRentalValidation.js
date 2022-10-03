@@ -1,12 +1,12 @@
-import { database } from "pg/lib/defaults.js";
+import { database } from "../database/database.js";
 import { STATUS_CODE } from "../enums/statusCode.js";
 import {
   customerIdAlreadyExist,
-  gameAlreadyExist,
+  gameIdAlreadyExist,
 } from "../modules/alreadyExist.js";
 import { rentalSchema } from "../schemas/rentalSchema.js";
 
-async function createCustomersValidation(request, response, next) {
+async function createRentalValidation(request, response, next) {
   try {
     const body = response.locals.body;
     const { value, error } = rentalSchema.validate(body);
@@ -21,14 +21,14 @@ async function createCustomersValidation(request, response, next) {
 
     if (
       !(await customerIdAlreadyExist(customerId)) ||
-      !(await gameAlreadyExist(gameId))
+      !(await gameIdAlreadyExist(gameId))
     ) {
       response.sendStatus(STATUS_CODE.BAD_REQUEST);
       return;
     }
-    
+
     const game = await database.query(
-      "SELECT stockTotal FROM games WHERE id=$1",
+      'SELECT "stockTotal" FROM games WHERE id=$1',
       [gameId]
     );
 
@@ -49,4 +49,4 @@ async function createCustomersValidation(request, response, next) {
   }
 }
 
-export { createCustomersValidation };
+export { createRentalValidation };

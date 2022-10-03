@@ -31,7 +31,7 @@ async function createGame(request, response) {
 
     await database.query(
       'INSERT INTO games (name, image, "stockTotal", "categoryId", "pricePerDay") VALUES ($1,$2,$3,$4,$5)',
-      [name, image, stockTotal, categoryId, pricePerDay]
+      [name, image, stockTotal, categoryId, pricePerDay*100]
     );
 
     response.sendStatus(STATUS_CODE.CREATED);
