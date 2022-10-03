@@ -44,16 +44,33 @@ async function getCustomerById(request, response) {
   }
 }
 
-function createCustomer(request, response) {
+async function createCustomer(request, response) {
   try {
+    const { name, phone, cpf, birthday } = response.locals.body;
+
+    await database.query(
+      "INSERT INTO customers (name, phone, cpf, birthday) VALUES ($1, $2, $3, $4)",
+      [name, phone, cpf, birthday]
+    );
+
+    response.sendStatus(STATUS_CODE.CREATED);
   } catch (err) {
     console.log(err);
     response.sendStatus(STATUS_CODE.SERVER_ERROR);
   }
 }
 
-function updateCustomers(request, response) {
+async function updateCustomers(request, response) {
   try {
+    const { name, phone, cpf, birthday } = response.locals.body;
+    const { id } = response.locals.params;
+
+    await database.query(
+      "UPDATE customers name=$1, phone=$2, cpf=$3, birthday=$4) WHERE id=$5",
+      [name, phone, cpf, birthday, id]
+    );
+
+    response.sendStatus(STATUS_CODE.CREATED);
   } catch (err) {
     console.log(err);
     response.sendStatus(STATUS_CODE.SERVER_ERROR);

@@ -8,7 +8,10 @@ const propertiesToSanitize = [
   "categoryId",
   "pricePerDay",
   "cpf",
-  "id"
+  "id",
+  "phone",
+  "cpf",
+  "birthday",
 ];
 
 function htmlSanitizer(request, response, next) {

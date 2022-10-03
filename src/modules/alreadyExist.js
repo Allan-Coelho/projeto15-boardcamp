@@ -28,4 +28,18 @@ async function gameAlreadyExist(value) {
   }
 }
 
-export { categoryAlreadyExist, gameAlreadyExist };
+async function customerAlreadyExist(cpf, limit = 0) {
+  try {
+    const result = await database.query(
+      "SELECT cpf FROM customers WHERE cpf=$1",
+      [cpf]
+    );
+
+    return result.rowCount === limit ? false : true;
+  } catch (err) {
+    console.log(err);
+    console.log("alreadyExist error");
+  }
+}
+
+export { categoryAlreadyExist, gameAlreadyExist, customerAlreadyExist };
