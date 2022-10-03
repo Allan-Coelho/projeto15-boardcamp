@@ -15,8 +15,8 @@ async function listCustomers(request, response) {
       return;
     }
 
-    customers = database.query("SELECT * FROM customers");
-    response.send(customers);
+    customers = await database.query("SELECT * FROM customers");
+    response.send(customers.rows);
   } catch (err) {
     console.log(err);
     response.sendStatus(STATUS_CODE.SERVER_ERROR);
@@ -65,12 +65,17 @@ async function updateCustomers(request, response) {
     const { name, phone, cpf, birthday } = response.locals.body;
     const { id } = response.locals.params;
 
-    await database.query(
-      "UPDATE customers name=$1, phone=$2, cpf=$3, birthday=$4) WHERE id=$5",
+    const queryResult = await database.query(
+      "UPDATE customers SET name=$1, phone=$2, cpf=$3, birthday=$4 WHERE id=$5",
       [name, phone, cpf, birthday, id]
     );
 
-    response.sendStatus(STATUS_CODE.CREATED);
+    if (queryResult.rowCount === 0) {
+      response.sendStatus(STATUS_CODE.NOT_FOUND);
+      return;
+    }
+
+    response.sendStatus(STATUS_CODE.OK);
   } catch (err) {
     console.log(err);
     response.sendStatus(STATUS_CODE.SERVER_ERROR);

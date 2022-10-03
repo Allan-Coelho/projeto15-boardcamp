@@ -3,13 +3,16 @@ import { database } from "../database/database.js";
 
 async function listGames(request, response) {
   try {
-    const { name } = response.locals.query;
+    const query = response.locals.query;
     let games;
-    if (name === undefined) {
+
+    if (query === undefined) {
       games = await database.query("SELECT * FROM games");
       response.send(games.rows);
       return;
     }
+
+    const { name } = query;
     games = await database.query(
       "SELECT * FROM games WHERE lower(name) LIKE lower($1)%",
       [name]
@@ -27,7 +30,7 @@ async function createGame(request, response) {
       response.locals.body;
 
     await database.query(
-      "INSERT INTO games (name, image, stockTotal, categoryId, pricePerDay) VALUES ($1,$2,$3,$4,$5)",
+      'INSERT INTO games (name, image, "stockTotal", "categoryId", "pricePerDay") VALUES ($1,$2,$3,$4,$5)',
       [name, image, stockTotal, categoryId, pricePerDay]
     );
 

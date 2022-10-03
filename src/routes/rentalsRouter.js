@@ -9,7 +9,7 @@ import { htmlSanitizer } from "../middlewares/htmlSanitizer.js";
 
 const router = express.Router();
 
-router.get("/rentals", htmlSanitizer, listRentals);
+router.get("/rentals/:customerId", htmlSanitizer, listRentals);
 router.post("/rentals", htmlSanitizer, createRental);
 router.post("/rentals/:id/return", htmlSanitizer, returnRentalById);
 router.delete("/rentals/:id", htmlSanitizer, deleteRentalById);

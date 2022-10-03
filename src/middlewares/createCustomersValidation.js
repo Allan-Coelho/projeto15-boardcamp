@@ -9,6 +9,7 @@ async function createCustomersValidation(request, response, next) {
     const { cpf } = value;
 
     if (error !== undefined) {
+      console.log(error);
       response.sendStatus(STATUS_CODE.BAD_REQUEST);
       return;
     }

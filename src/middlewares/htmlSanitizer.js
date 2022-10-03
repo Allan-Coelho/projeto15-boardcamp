@@ -12,6 +12,7 @@ const propertiesToSanitize = [
   "phone",
   "cpf",
   "birthday",
+  "customerId",
 ];
 
 function htmlSanitizer(request, response, next) {
