@@ -14,4 +14,18 @@ async function categoryAlreadyExist(value) {
   }
 }
 
-export { categoryAlreadyExist };
+async function gameAlreadyExist(value) {
+  try {
+    const result = await database.query(
+      "SELECT name FROM games WHERE name=$1",
+      [value]
+    );
+
+    return result.rowCount === 0 ? false : true;
+  } catch (err) {
+    console.log(err);
+    console.log("alreadyExist error");
+  }
+}
+
+export { categoryAlreadyExist, gameAlreadyExist };

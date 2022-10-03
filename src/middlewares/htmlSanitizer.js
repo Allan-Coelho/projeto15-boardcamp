@@ -1,7 +1,13 @@
 import { stripHtml } from "string-strip-html";
 
 const requestObjectsToSanitize = ["headers", "body", "query", "params"];
-const propertiesToSanitize = ["name"];
+const propertiesToSanitize = [
+  "name",
+  "image",
+  "stockTotal",
+  "categoryId",
+  "pricePerDay",
+];
 
 function htmlSanitizer(request, response, next) {
   console.log("Sanitize begin");
