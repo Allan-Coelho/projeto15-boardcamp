@@ -1,6 +1,7 @@
 import { STATUS_CODE } from "../enums/statusCode.js";
 import { database } from "../database/database.js";
 import dayjs from "dayjs";
+import { dayToMilliseconds, millisecondsToDays } from "../modules/time.js";
 
 async function listRentals(request, response) {
   try {
@@ -96,16 +97,44 @@ async function createRental(request, response) {
   }
 }
 
-function returnRentalById(request, response) {
+async function returnRentalById(request, response) {
   try {
+    const { id } = response.locals.params;
+    const returnDate = dayjs().format("YYYY-MM-DD");
+    const queryRental = await database.query(
+      "SELECT * FROM rentals WHERE id=$1",
+      [id]
+    );
+    console.log("foi  ");
+    const { rentDate, daysRented, originalPrice } = queryRental.rows[0];
+    const originalReturnDate = rentDate + dayToMilliseconds(daysRented);
+    const pricePerDay = originalPrice / daysRented;
+    let delayFee = 0;
+
+    if (Date.now() > originalReturnDate) {
+      delayFee =
+        millisecondsToDays(Date.now() - originalReturnDate) * pricePerDay;
+    }
+
+    await database.query(
+      'UPDATE rentals SET "returnDate"=$2, "delayFee"=$3 WHERE id=$1',
+      [id, returnDate, delayFee]
+    );
+
+    response.send(200);
   } catch (err) {
     console.log(err);
     response.sendStatus(STATUS_CODE.SERVER_ERROR);
   }
 }
 
-function deleteRentalById(request, response) {
+async function deleteRentalById(request, response) {
   try {
+    const { id } = response.locals.params;
+    const rentalsQuery = await database.query(
+      "SELECT * FROM rentals WHERE id=$1",
+      [id]
+    );
   } catch (err) {
     console.log(err);
     response.sendStatus(STATUS_CODE.SERVER_ERROR);
